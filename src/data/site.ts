@@ -1,3 +1,17 @@
+function publicSiteUrl(): string {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (fromEnv) {
+    return fromEnv;
+  }
+
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  if (vercelHost) {
+    return vercelHost.startsWith("http") ? vercelHost : `https://${vercelHost}`;
+  }
+
+  return "http://localhost:3000";
+}
+
 export const site = {
   name: "Vitaly Romensky",
   mark: "VR.",
@@ -7,7 +21,7 @@ export const site = {
   summary:
     "Senior Full-Stack Engineer with 8+ years of experience building production web applications with React, Next.js, TypeScript, and Node.js — from frontend architecture and authentication to APIs, databases, testing, and deployment.",
   location: "Germany · Remote B2B / Contract",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: publicSiteUrl(),
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "superfullstackdev@gmail.com",
   linkedin:
     process.env.NEXT_PUBLIC_LINKEDIN_URL ??
