@@ -12,6 +12,16 @@ function publicSiteUrl(): string {
   return "http://localhost:3000";
 }
 
+/** Empty Vercel env vars are `""`, which must not override real defaults. */
+function envOr(value: string | undefined, fallback: string): string {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : fallback;
+}
+
+function optionalEnv(value: string | undefined): string {
+  return value?.trim() ?? "";
+}
+
 export const site = {
   name: "Vitaly Romensky",
   mark: "VR.",
@@ -22,16 +32,17 @@ export const site = {
     "Senior Full-Stack Engineer with 8+ years of experience building production web applications with React, Next.js, TypeScript, and Node.js — from frontend architecture and authentication to APIs, databases, testing, and deployment.",
   location: "Germany · Remote B2B / Contract",
   url: publicSiteUrl(),
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "superfullstackdev@gmail.com",
-  linkedin:
-    process.env.NEXT_PUBLIC_LINKEDIN_URL ??
+  email: envOr(process.env.NEXT_PUBLIC_CONTACT_EMAIL, "superfullstackdev@gmail.com"),
+  linkedin: envOr(
+    process.env.NEXT_PUBLIC_LINKEDIN_URL,
     "https://www.linkedin.com/in/vitaly-javascript-developer-116493203",
-  github: process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/Frontendman25",
-  twitter: process.env.NEXT_PUBLIC_TWITTER_URL ?? "https://x.com/viromix",
-  telegram: process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "",
-  upwork: process.env.NEXT_PUBLIC_UPWORK_URL ?? "",
-  calendar: process.env.NEXT_PUBLIC_CALENDAR_URL ?? "",
+  ),
+  github: envOr(process.env.NEXT_PUBLIC_GITHUB_URL, "https://github.com/Frontendman25"),
+  twitter: envOr(process.env.NEXT_PUBLIC_TWITTER_URL, "https://x.com/viromix"),
+  telegram: optionalEnv(process.env.NEXT_PUBLIC_TELEGRAM_URL),
+  whatsapp: optionalEnv(process.env.NEXT_PUBLIC_WHATSAPP_URL),
+  upwork: optionalEnv(process.env.NEXT_PUBLIC_UPWORK_URL),
+  calendar: optionalEnv(process.env.NEXT_PUBLIC_CALENDAR_URL),
   cvHref: "/vitaly-romensky-cv.pdf",
   photo: "/images/vitaly.jpg",
   aboutPhoto: "/images/about-vitaly.jpg",
